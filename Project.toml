@@ -28,7 +28,7 @@ cuDNN = "02a925ec-e4fe-4b08-9a7e-0d78e3d38ccd"
 
 [compat]
 Metal = "0.3.0"
-AMDGPU = "0.4.8"
+AMDGPU = "0.4.13"
 Adapt = "3.0"
 CUDA = "3, 4"
 ChainRulesCore = "1.12"
