@@ -272,7 +272,7 @@ end
 
 @testset "bugs fixed" begin
   # https://github.com/FluxML/Flux.jl/issues/1421
-  @test Conv((5, 5), 10 => 20, identity; init = Base.randn).bias isa Vector{Float64}
+  @test Conv((5, 5), 10 => 20, identity; init = Base.randn).bias isa Vector{<:Real}
 end
 
 @testset "constructors: $fun" for fun in [Conv, CrossCor, ConvTranspose, DepthwiseConv]

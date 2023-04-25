@@ -32,8 +32,8 @@ end
 Flux.Optimise.update!(opt, ps, gs)
 ```
 """
-mutable struct Descent <: AbstractOptimiser
-  eta::Float64
+mutable struct Descent{T<:Real} <: AbstractOptimiser
+  eta::T
 end
 
 Descent() = Descent(0.1)
@@ -60,9 +60,9 @@ opt = Momentum()
 opt = Momentum(0.01, 0.99)
 ```
 """
-mutable struct Momentum <: AbstractOptimiser
-  eta::Float64
-  rho::Float64
+mutable struct Momentum{T<:Real} <: AbstractOptimiser
+  eta::T
+  rho::T
   velocity::IdDict
 end
 
@@ -93,9 +93,9 @@ opt = Nesterov()
 opt = Nesterov(0.003, 0.95)
 ```
 """
-mutable struct Nesterov <: AbstractOptimiser
-  eta::Float64
-  rho::Float64
+mutable struct Nesterov{T<:Real} <: AbstractOptimiser
+  eta::T
+  rho::T
   velocity::IdDict
 end
 
@@ -130,10 +130,10 @@ opt = RMSProp()
 opt = RMSProp(0.002, 0.95)
 ```
 """
-mutable struct RMSProp <: AbstractOptimiser
-  eta::Float64
-  rho::Float64
-  epsilon::Float64
+mutable struct RMSProp{T<:Real} <: AbstractOptimiser
+  eta::T
+  rho::T
+  epsilon::T
   acc::IdDict
 end
 RMSProp(η::Real = 0.001, ρ::Real = 0.9, ϵ::Real = EPS) = RMSProp(η, ρ, ϵ, IdDict())
@@ -165,9 +165,9 @@ opt = Adam(0.001, (0.9, 0.8))
 ```
 """
 mutable struct Adam <: AbstractOptimiser
-  eta::Float64
-  beta::Tuple{Float64,Float64}
-  epsilon::Float64
+  eta::Real
+  beta::Tuple{Real,Real}
+  epsilon::Real
   state::IdDict{Any, Any}
 end
 Adam(η::Real = 0.001, β::Tuple = (0.9, 0.999), ϵ::Real = EPS) = Adam(η, β, ϵ, IdDict())
@@ -177,8 +177,8 @@ function apply!(o::Adam, x, Δ)
   η, β = o.eta, o.beta
 
   mt, vt, βp = get!(o.state, x) do
-      (zero(x), zero(x), Float64[β[1], β[2]])
-  end :: Tuple{typeof(x),typeof(x),Vector{Float64}}
+      (zero(x), zero(x), Real[β[1], β[2]])
+  end :: Tuple{typeof(x),typeof(x),Vector{Real}}
 
   @. mt = β[1] * mt + (1 - β[1]) * Δ
   @. vt = β[2] * vt + (1 - β[2]) * Δ * conj(Δ)
@@ -207,9 +207,9 @@ opt = RAdam(0.001, (0.9, 0.8))
 ```
 """
 mutable struct RAdam <: AbstractOptimiser
-  eta::Float64
-  beta::Tuple{Float64,Float64}
-  epsilon::Float64
+  eta::Real
+  beta::Tuple{Real,Real}
+  epsilon::Real
   state::IdDict{Any, Any}
 end
 RAdam(η::Real = 0.001, β::Tuple = (0.9, 0.999), ϵ::Real = EPS) = RAdam(η, β, ϵ, IdDict())
@@ -220,8 +220,8 @@ function apply!(o::RAdam, x, Δ)
   ρ∞ = 2/(1-β[2])-1
 
   mt, vt, βp, t = get!(o.state, x) do
-      (zero(x), zero(x), Float64[β[1], β[2]], Ref(1))
-  end :: Tuple{typeof(x),typeof(x),Vector{Float64},Base.RefValue{Int}}
+      (zero(x), zero(x), Real[β[1], β[2]], Ref(1))
+  end :: Tuple{typeof(x),typeof(x),Vector{Real},Base.RefValue{Int}}
 
   @. mt = β[1] * mt + (1 - β[1]) * Δ
   @. vt = β[2] * vt + (1 - β[2]) * Δ * conj(Δ)
@@ -257,9 +257,9 @@ opt = AdaMax(0.001, (0.9, 0.995))
 ```
 """
 mutable struct AdaMax <: AbstractOptimiser
-  eta::Float64
-  beta::Tuple{Float64,Float64}
-  epsilon::Float64
+  eta::Real
+  beta::Tuple{Real,Real}
+  epsilon::Real
   state::IdDict{Any, Any}
 end
 AdaMax(η::Real = 0.001, β::Tuple = (0.9, 0.999), ϵ::Real = EPS) = AdaMax(η, β, ϵ, IdDict())
@@ -269,8 +269,8 @@ function apply!(o::AdaMax, x, Δ)
   η, β = o.eta, o.beta
 
   mt, ut, βp = get!(o.state, x) do
-      (zero(x), zero(x), Float64[β[1], β[2]])
-  end :: Tuple{typeof(x),typeof(x),Vector{Float64}}
+      (zero(x), zero(x), Real[β[1], β[2]])
+  end :: Tuple{typeof(x),typeof(x),Vector{Real}}
 
   @. mt = β[1] * mt + (1 - β[1]) * Δ
   @. ut = max(β[2] * ut, abs(Δ))
@@ -300,9 +300,9 @@ opt = OAdam(0.001, (0.9, 0.995))
 ```
 """
 mutable struct OAdam <: AbstractOptimiser
-  eta::Float64
-  beta::Tuple{Float64,Float64}
-  epsilon::Float64
+  eta::Real
+  beta::Tuple{Real,Real}
+  epsilon::Real
   state::IdDict{Any, Any}
 end
 OAdam(η::Real = 0.001, β::Tuple = (0.5, 0.9), ϵ::Real = EPS) = OAdam(η, β, ϵ, IdDict())
@@ -312,8 +312,8 @@ function apply!(o::OAdam, x, Δ)
   η, β = o.eta, o.beta
 
   mt, vt, Δ_, βp = get!(o.state, x) do
-      (zero(x), zero(x), zero(x), Float64[β[1], β[2]])
-  end :: Tuple{typeof(x),typeof(x),typeof(x),Vector{Float64}}
+      (zero(x), zero(x), zero(x), Real[β[1], β[2]])
+  end :: Tuple{typeof(x),typeof(x),typeof(x),Vector{Real}}
 
   @. mt = β[1] * mt + (1 - β[1]) * Δ
   @. vt = β[2] * vt + (1 - β[2]) * Δ * conj(Δ)
@@ -344,8 +344,8 @@ opt = AdaGrad(0.001)
 ```
 """
 mutable struct AdaGrad <: AbstractOptimiser
-  eta::Float64
-  epsilon::Float64
+  eta::Real
+  epsilon::Real
   acc::IdDict
 end
 AdaGrad(η::Real = 0.1, ϵ::Real = EPS) = AdaGrad(η, ϵ, IdDict())
@@ -376,8 +376,8 @@ opt = AdaDelta(0.89)
 ```
 """
 mutable struct AdaDelta <: AbstractOptimiser
-  rho::Float64
-  epsilon::Float64
+  rho::Real
+  epsilon::Real
   state::IdDict{Any, Any}
 end
 AdaDelta(ρ::Real = 0.9, ϵ::Real = EPS) = AdaDelta(ρ, ϵ, IdDict())
@@ -414,9 +414,9 @@ opt = AMSGrad(0.001, (0.89, 0.995))
 ```
 """
 mutable struct AMSGrad <: AbstractOptimiser
-  eta::Float64
-  beta::Tuple{Float64, Float64}
-  epsilon::Float64
+  eta::Real
+  beta::Tuple{Real, Real}
+  epsilon::Real
   state::IdDict{Any, Any}
 end
 AMSGrad(η::Real = 0.001, β = (0.9, 0.999), ϵ::Real = EPS) = AMSGrad(η, β, ϵ, IdDict())
@@ -455,9 +455,9 @@ opt = NAdam(0.002, (0.89, 0.995))
 ```
 """
 mutable struct NAdam <: AbstractOptimiser
-  eta::Float64
-  beta::Tuple{Float64, Float64}
-  epsilon::Float64
+  eta::Real
+  beta::Tuple{Real, Real}
+  epsilon::Real
   state::IdDict{Any, Any}
 end
 NAdam(η::Real = 0.001, β = (0.9, 0.999), ϵ::Real = EPS) = NAdam(η, β, ϵ, IdDict())
@@ -522,9 +522,9 @@ opt = AdaBelief(0.001, (0.9, 0.8))
 ```
 """
 mutable struct AdaBelief <: AbstractOptimiser
-  eta::Float64
-  beta::Tuple{Float64,Float64}
-  epsilon::Float64
+  eta::Real
+  beta::Tuple{Real,Real}
+  epsilon::Real
   state::IdDict{Any, Any}
 end
 AdaBelief(η::Real = 0.001, β = (0.9, 0.999), ϵ::Real = EPS) = AdaBelief(η, β, ϵ, IdDict())
@@ -534,8 +534,8 @@ function apply!(o::AdaBelief, x, Δ)
   η, β = o.eta, o.beta
 
   mt, st, βp = get!(o.state, x) do
-      (zero(x), zero(x), Float64[β[1], β[2]])
-  end :: Tuple{typeof(x), typeof(x), Vector{Float64}}
+      (zero(x), zero(x), Real[β[1], β[2]])
+  end :: Tuple{typeof(x), typeof(x), Vector{Real}}
 
   #= st is a variance and can go to zero. This is in contrast to Adam, which uses the
   second moment which is usually far enough from zero. This is problematic, since st
@@ -608,7 +608,7 @@ opt = Optimiser(Adam(1f-3), InvDecay(1f-2))
 ```
 """
 mutable struct InvDecay <: AbstractOptimiser
-  gamma::Float64
+  gamma::Real
   state::IdDict{Any, Int}
 end
 
@@ -652,10 +652,10 @@ Note: you may want to start with `η=1` in `ExpDecay` when combined with other
 optimisers (`Adam` in this case) that have their own learning rate.
 """
 mutable struct ExpDecay <: AbstractOptimiser
-  eta::Float64
-  decay::Float64
+  eta::Real
+  decay::Real
   step::Int64
-  clip::Float64
+  clip::Real
   start::Int64
   current::IdDict
 end
