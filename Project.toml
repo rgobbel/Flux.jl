@@ -11,7 +11,6 @@ LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 MLUtils = "f1d291b0-491e-4a28-83b9-f70985020b54"
 MacroTools = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
 Metal = "dde4c033-4e86-420c-a63e-0dd931031962"
-Metal = "dde4c033-4e86-420c-a63e-0dd931031962"
 NNlib = "872c559c-99b0-510c-b3b7-b6c96a88d5cd"
 NNlibCUDA = "a00861dc-f156-4864-bf3c-e6376f28a68d"
 OneHotArrays = "0b1bfda6-eb8a-41d2-88d8-f5af5cad476f"
@@ -52,10 +51,8 @@ julia = "1.6"
 [extensions]
 AMDGPUExt = "AMDGPU"
 MetalExt = "Metal"
-MetalExt = "Metal"
 
 [extras]
-Metal = "dde4c033-4e86-420c-a63e-0dd931031962"
 Metal = "dde4c033-4e86-420c-a63e-0dd931031962"
 AMDGPU = "21141c5a-9bdb-4563-92ae-f87d6854732e"
 BSON = "fbb218c0-5317-5bc6-957e-2ee96dd4b1f0"
@@ -67,11 +64,11 @@ LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test", "Documenter", "IterTools", "LinearAlgebra", "FillArrays", "ComponentArrays", "BSON", "Metal", "AMDGPU"][weakdeps]
-test = ["Test", "Documenter", "IterTools", "LinearAlgebra", "FillArrays", "ComponentArrays", "BSON", "Metal", "AMDGPU"][weakdeps]
+test = ["Test", "Documenter", "IterTools", "LinearAlgebra", "FillArrays", "ComponentArrays", "BSON", "Metal", "AMDGPU"]
+
 [weakdeps]
 AMDGPU = "21141c5a-9bdb-4563-92ae-f87d6854732e"
 Metal = "dde4c033-4e86-420c-a63e-0dd931031962"
 
-Metal = "dde4c033-4e86-420c-a63e-0dd931031962"
+
 
