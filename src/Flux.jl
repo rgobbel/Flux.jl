@@ -1,5 +1,9 @@
 module Flux
 
+if !isdefined(Base, :get_extension)
+  using Requires
+end
+
 using Base: tail
 using Preferences
 using LinearAlgebra, Statistics, Random  # standard lib
@@ -76,5 +80,11 @@ using .Losses
 include("deprecations.jl")
 
 include("cuda/cuda.jl")
+
+@static if !isdefined(Base, :get_extension)
+  function __init__()
+    @require Metal = "dde4c033-4e86-420c-a63e-0dd931031962" include("../ext/MetalExt/MetalExt.jl")
+  end
+end
 
 end # module

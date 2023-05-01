@@ -298,7 +298,7 @@ function check_use_cuda()
       @warn "CUDA.jl found cuda, but did not find libcudnn. Some functionality will not be available."  maxlog=1
     end
     if !(use_cuda[])
-      @info """The GPU function is being called but the GPU is not accessible. 
+      @info """The GPU function is being called but CUDA is not accessible. 
                Defaulting back to the CPU. (No action is required if you want to run on the CPU).""" maxlog=1
     end
   end
